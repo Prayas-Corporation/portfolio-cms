@@ -2,16 +2,16 @@ import { Icons } from "@/components/icons";
 import { HomeIcon, NotebookIcon } from "lucide-react";
 
 export const DATA = {
-  name: "Dillion Verma",
-  initials: "DV",
-  url: "https://dillion.io",
+  name: "Rishabh Raj",
+  initials: "Raj",
+  url: "https://rishabhraj.io",
   location: "San Francisco, CA",
   locationLink: "https://www.google.com/maps/place/sanfrancisco",
   description:
     "Software Engineer turned Entrepreneur. I love building things and helping people. Very active on Twitter.",
   summary:
     "At the end of 2022, I quit my job as a software engineer to go fulltime into building and scaling my own SaaS businesses. In the past, [I pursued a double degree in computer science and business](/#education), [interned at big tech companies in Silicon Valley](https://www.youtube.com/watch?v=d-LJ2e5qKdE), and [competed in over 21 hackathons for fun](/#hackathons). I also had the pleasure of being a part of the first ever in-person cohort of buildspace called [buildspace sf1](https://buildspace.so/sf1).",
-  avatarUrl: "/me.png",
+  avatarUrl: "/rishabh.jpeg",
   skills: [
     "React",
     "Next.js",
@@ -35,28 +35,28 @@ export const DATA = {
     social: {
       GitHub: {
         name: "GitHub",
-        url: "https://dub.sh/dillion-github",
+        url: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         icon: Icons.github,
 
         navbar: true,
       },
       LinkedIn: {
         name: "LinkedIn",
-        url: "https://dub.sh/dillion-linkedin",
+        url: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         icon: Icons.linkedin,
 
         navbar: true,
       },
       X: {
         name: "X",
-        url: "https://dub.sh/dillion-twitter",
+        url: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         icon: Icons.x,
 
         navbar: true,
       },
       Youtube: {
         name: "Youtube",
-        url: "https://dub.sh/dillion-youtube",
+        url: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         icon: Icons.youtube,
         navbar: true,
       },
@@ -265,7 +265,7 @@ export const DATA = {
         },
         {
           type: "Source",
-          href: "https://github.com/dillionverma/llm.report",
+          href: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
           icon: <Icons.github className="size-3" />,
         },
       ],
@@ -419,7 +419,7 @@ export const DATA = {
         {
           title: "Client Source",
           icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/RTSPClient",
+          href: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         },
       ],
     },
@@ -506,7 +506,7 @@ export const DATA = {
         {
           title: "Source",
           icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/genecis",
+          href: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         },
       ],
     },
@@ -537,7 +537,7 @@ export const DATA = {
         {
           title: "Source",
           icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/pocketdoc-react-native",
+          href: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         },
       ],
     },
@@ -572,7 +572,7 @@ export const DATA = {
         {
           title: "Source",
           icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/pocketdoc-react-native",
+          href: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         },
       ],
     },
@@ -588,7 +588,7 @@ export const DATA = {
         {
           title: "Source",
           icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/earthwatch",
+          href: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         },
       ],
     },
@@ -605,7 +605,7 @@ export const DATA = {
         {
           title: "Source",
           icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/threejs-planes",
+          href: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         },
       ],
     },
@@ -645,7 +645,7 @@ export const DATA = {
         {
           title: "Source (Mobile)",
           icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/human-huntr-react-native",
+          href: "https://www.linkedin.com/in/rishabh-raj-8a91b7206/",
         },
         {
           title: "Source (API)",
