@@ -10,7 +10,7 @@ export const config = {
 };
 
 // Ensure the directory exists
-const uploadDir = path.join(process.cwd(), '/public/uploads/videos');
+const uploadDir = path.join(process.cwd(), '/public');
 fs.mkdirSync(uploadDir, { recursive: true });
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -34,7 +34,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(400).json({ error: 'No video file uploaded' });
       }
 
-      const videoUrl = `/uploads/videos/${path.basename(file.filepath)}`;
+      const videoUrl = `/${path.basename(file.filepath)}`;
       console.log('Video uploaded to:', videoUrl);
       res.status(200).json({ url: videoUrl });
     });
