@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import CMSLayout from '@/components/CMSLayout';
 
 type Project = {
@@ -10,6 +10,7 @@ type Project = {
 
 export default function ProjectsCMS() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const inputFileRefs = useRef<(HTMLInputElement | null)[]>([]); // Array of refs for each project's file input
 
   useEffect(() => {
     fetch('/api/projects')
@@ -30,29 +31,30 @@ export default function ProjectsCMS() {
     });
   };
 
-  const handleFileChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append('video', file);
+  const handleGifUpload = async (index: number, e: React.FormEvent) => {
+    e.preventDefault();
 
-      fetch('/api/uploadVideo', {  // Make sure the endpoint is correct
-        method: 'POST',
-        body: formData,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.url) {
-            setProjects((prevProjects) => {
-              const newProjects = [...prevProjects];
-              newProjects[index] = { ...newProjects[index], videoUrl: data.url };
-              return newProjects;
-            });
-          } else {
-            console.error('Video upload failed:', data.error);
-          }
-        })
-        .catch((error) => console.error('Error uploading video:', error));
+    const fileInput = inputFileRefs.current[index];
+    if (!fileInput?.files?.length) {
+      throw new Error('No file selected');
+    }
+
+    const file = fileInput.files[0];
+    const response = await fetch(`/api/uploadGif?filename=${file.name}`, {
+      method: 'POST',
+      body: file,
+    });
+
+    const data = await response.json();
+
+    if (data.url) {
+      setProjects((prevProjects) => {
+        const newProjects = [...prevProjects];
+        newProjects[index] = { ...newProjects[index], gifUrl: data.url };
+        return newProjects;
+      });
+    } else {
+      console.error('Error uploading GIF:', data.error);
     }
   };
 
@@ -61,10 +63,12 @@ export default function ProjectsCMS() {
       ...prevProjects,
       { title: '', description: '', gifUrl: '', videoUrl: '' },
     ]);
+    inputFileRefs.current.push(null); // Add a new ref slot for the new project
   };
 
   const handleRemoveProject = (index: number) => {
     setProjects((prevProjects) => prevProjects.filter((_, i) => i !== index));
+    inputFileRefs.current.splice(index, 1); // Remove the corresponding ref slot
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -113,30 +117,34 @@ export default function ProjectsCMS() {
                 type="text"
                 name="gifUrl"
                 value={project.gifUrl}
-                onChange={(e) => handleChange(index, e)}
+                onChange={(e) => handleChange(index, e)} // Make gifUrl editable
                 className="w-full p-2 border"
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-1">Upload Video</label>
+              <label className="block mb-1">Upload GIF</label>
               <input
                 type="file"
-                name="videoFile"
-                accept="video/*"
-                onChange={(e) => handleFileChange(index, e)}
+                ref={(el) => {
+                  inputFileRefs.current[index] = el; // Assign ref to corresponding input
+                }}
+                accept="image/gif"
                 className="w-full p-2 border"
               />
+              <button
+                type="button"
+                onClick={(e) => handleGifUpload(index, e)}
+                className="bg-blue-500 text-white py-2 px-4 rounded mt-2"
+              >
+                Upload GIF
+              </button>
             </div>
-            <div className="mb-4">
-              <label className="block mb-1">Video URL</label>
-              <input
-                type="text"
-                name="videoUrl"
-                value={project.videoUrl}
-                readOnly
-                className="w-full p-2 border"
-              />
-            </div>
+            {project.gifUrl && (
+              <div className="mb-4">
+                <label className="block mb-1">GIF Preview</label>
+                <img src={project.gifUrl} alt="GIF Preview" className="w-full h-auto" />
+              </div>
+            )}
             <button
               type="button"
               onClick={() => handleRemoveProject(index)}

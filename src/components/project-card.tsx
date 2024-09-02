@@ -20,6 +20,7 @@ interface Props {
   link?: string;
   image?: string;
   video?: string;
+  gifUrl?: string; // Add GIF URL prop
   links?: readonly {
     icon: React.ReactNode;
     type: string;
@@ -37,6 +38,7 @@ export function ProjectCard({
   link,
   image,
   video,
+  gifUrl, // Add GIF URL prop
   links,
   className,
 }: Props) {
@@ -57,16 +59,23 @@ export function ProjectCard({
             loop
             muted
             playsInline
-            className="pointer-events-none mx-auto h-40 w-full object-cover object-top" // needed because random black line at bottom of video
+            className="pointer-events-none mx-auto h-40 w-full object-cover object-top"
           />
         )}
-        {image && (
+        {gifUrl && (
+          <img
+            src={gifUrl}
+            alt={title}
+            className="pointer-events-none mx-auto h-40 w-full object-cover object-top"
+          />
+        )}
+        {image && !gifUrl && !video && (
           <Image
             src={image}
             alt={title}
             width={500}
             height={300}
-            className="h-40 w-full overflow-hidden object-cover object-top"
+            className="pointer-events-none mx-auto h-40 w-full object-cover object-top"
           />
         )}
       </Link>
