@@ -1,10 +1,12 @@
+"use client";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
-import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
+import Head from "next/head";
 import "./globals.css";
 
 const fontSans = FontSans({
@@ -12,49 +14,30 @@ const fontSans = FontSans({
   variable: "--font-sans",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(DATA.url),
-  title: {
-    default: DATA.name,
-    template: `%s | ${DATA.name}`,
-  },
-  description: DATA.description,
-  openGraph: {
-    title: `${DATA.name}`,
-    description: DATA.description,
-    url: DATA.url,
-    siteName: `${DATA.name}`,
-    locale: "en_US",
-    type: "website",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  twitter: {
-    title: `${DATA.name}`,
-    card: "summary_large_image",
-  },
-  verification: {
-    google: "",
-    yandex: "",
-  },
-};
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const [heroData, setHeroData] = useState<{ name: string } | null>(null); // State to store dynamic hero data
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  useEffect(() => {
+    fetch("/api/hero")
+      .then((response) => response.json())
+      .then((data) => setHeroData(data))
+      .catch((error) =>
+        console.error("Error fetching hero section data:", error)
+      );
+  }, []);
+
+  const dynamicName = heroData?.name || DATA.name; // Use dynamic name or fallback to static
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <Head>
+        <title>{dynamicName}</title> {/* Use dynamic name in the title */}
+        <meta name="description" content={DATA.description} />
+        <meta property="og:title" content={dynamicName} />
+        <meta property="og:description" content={DATA.description} />
+        <meta property="og:site_name" content={dynamicName} />
+        <meta property="twitter:title" content={dynamicName} />
+      </Head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased w-full max-w-5xl mx-auto py-8 sm:py-16 px-4 sm:px-12",
