@@ -2,29 +2,41 @@ import { useState, useEffect } from 'react';
 import CMSLayout from '@/components/CMSLayout';
 
 export default function ContactCMS() {
+  // Initialize state with default social structure
   const [contactData, setContactData] = useState<any>({
-    email: '',
-    tel: '',
-    social: {},
+    social: {
+      GitHub: { url: '' },
+      LinkedIn: { url: '' },
+      X: { url: '' },
+      Youtube: { url: '' },
+    },
   });
 
   useEffect(() => {
+    // Fetch the contact data on component mount
     fetch('/api/contact')
       .then((res) => res.json())
-      .then((data) => setContactData(data.contact || {}));
+      .then((data) => {
+        if (data && data.contact && data.contact.social) {
+          // Merge fetched data with default structure to prevent missing keys
+          setContactData((prevData: any) => ({
+            ...prevData,
+            social: {
+              ...prevData.social,
+              ...data.contact.social, // Merge with fetched social data
+            },
+          }));
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching contact data:", error);
+        // Optional: You can set a fallback error state here if needed
+      });
   }, []);
 
-  const handleChange = (e:any) => {
+  const handleSocialChange = (platform: any, e: any) => {
     const { name, value } = e.target;
-    setContactData((prevData:any) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSocialChange = (platform:any, e:any) => {
-    const { name, value } = e.target;
-    setContactData((prevData:any) => ({
+    setContactData((prevData: any) => ({
       ...prevData,
       social: {
         ...prevData.social,
@@ -36,14 +48,20 @@ export default function ContactCMS() {
     }));
   };
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
+    // Only send the updated social media URLs
+    const updatedSocialUrls = Object.keys(contactData.social).reduce((acc: any, platform: any) => {
+      acc[platform] = { url: contactData.social[platform]?.url };
+      return acc;
+    }, {});
+
     fetch('/api/contact', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ contact: contactData }),
+      body: JSON.stringify({ contact: { social: updatedSocialUrls } }), // Send only the updated URLs
     })
       .then((res) => res.json())
       .then((data) => alert(data.message));
@@ -51,39 +69,11 @@ export default function ContactCMS() {
 
   return (
     <CMSLayout>
-      <h1 className="text-2xl font-bold mb-4">Update Contact Information</h1>
+      <h1 className="text-2xl font-bold mb-4">Update Social Media URLs</h1>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block mb-1">Email</label>
-          <input
-            type="text"
-            name="email"
-            value={contactData.email}
-            onChange={handleChange}
-            className="w-full p-2 border"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Phone Number</label>
-          <input
-            type="text"
-            name="tel"
-            value={contactData.tel}
-            onChange={handleChange}
-            className="w-full p-2 border"
-          />
-        </div>
-        {Object.keys(contactData.social).map((platform:any) => (
+        {Object.keys(contactData.social).map((platform: any) => (
           <div key={platform} className="mb-4">
             <h3 className="font-semibold mb-2">{platform}</h3>
-            <label className="block mb-1">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={contactData.social[platform]?.name || ''}
-              onChange={(e) => handleSocialChange(platform, e)}
-              className="w-full p-2 border"
-            />
             <label className="block mb-1">URL</label>
             <input
               type="text"
@@ -98,7 +88,7 @@ export default function ContactCMS() {
           type="submit"
           className="bg-blue-500 text-white py-2 px-4 rounded"
         >
-          Update
+          Update URLs
         </button>
       </form>
     </CMSLayout>

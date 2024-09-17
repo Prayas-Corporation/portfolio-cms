@@ -71,7 +71,7 @@ export default function Page() {
       .then((data) => setContact(data.contact))
       .catch((error) => console.error("Error fetching contact data:", error));
   }, []);
-  console.log(heroData, "dsdsdsdssddssdsd");
+  console.log(contact, "dsdsdsdssddssdsd");
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-10">
       <section id="hero">
@@ -82,7 +82,8 @@ export default function Page() {
                 delay={BLUR_FADE_DELAY }
                 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
                 yOffset={8}
-                text={`Hi, I'm ${heroData.name || "there"} 👋`}
+                text={`Hi, I'm ${heroData.name || "there"} `}
+                // 👋
               />
               <BlurFadeText
                 className="max-w-[600px] md:text-xl"
@@ -211,6 +212,8 @@ export default function Page() {
                   image={project.image}
                   gifUrl={project.gifUrl} // Pass gifUrl to ProjectCard
                   links={project.links}
+                  youtubeLink={project.youtubeLink} // Pass YouTube link
+                  githubLink={project.githubLink} 
                 />
               </BlurFade>
             ))}
@@ -224,17 +227,13 @@ export default function Page() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
-                  Hackathons
+                Licenses & Certificate.
                 </div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                  I like building things
+                Certified Skills & Expertise
                 </h2>
                 <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  During my time in university, I attended {hackathons.length}+
-                  hackathons. People from around the country would come together
-                  and build incredible things in 2-3 days. It was eye-opening to
-                  see the endless possibilities brought to life by a group of
-                  motivated and passionate individuals.
+                I have earned licenses and certifications over the years. These certifications have helped me develop a deep understanding of various technologies and domains. 
                 </p>
               </div>
             </div>
@@ -273,12 +272,16 @@ export default function Page() {
               </h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 Want to chat? Just shoot me a dm{" "}
-                <Link
-                  href={DATA.contact.social.X.url}
-                  className="text-blue-500 hover:underline"
-                >
-                  with a direct question on twitter
-                </Link>{" "}
+                {contact?.social?.Youtube?.url ? (
+  <Link
+    href={contact.social.Youtube.url}
+    className="text-blue-500 hover:underline"
+  >
+    with a direct question on YouTube
+  </Link>
+) : (
+  <span>with a direct question on YouTube</span> // Fallback in case the URL is undefined
+)}
                 and I&apos;ll respond whenever I can. I will ignore all
                 soliciting.
               </p>

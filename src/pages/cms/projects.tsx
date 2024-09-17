@@ -6,11 +6,13 @@ type Project = {
   description: string;
   gifUrl?: string;
   videoUrl?: string;
+  youtubeLink?: string; // Add YouTube link prop
+  githubLink?: string; 
 };
 
 export default function ProjectsCMS() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const inputFileRefs = useRef<(HTMLInputElement | null)[]>([]); // Array of refs for each project's file input
+  const inputFileRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
     fetch('/api/projects')
@@ -33,12 +35,10 @@ export default function ProjectsCMS() {
 
   const handleGifUpload = async (index: number, e: React.FormEvent) => {
     e.preventDefault();
-
     const fileInput = inputFileRefs.current[index];
     if (!fileInput?.files?.length) {
       throw new Error('No file selected');
     }
-
     const file = fileInput.files[0];
     const response = await fetch(`/api/uploadGif?filename=${file.name}`, {
       method: 'POST',
@@ -46,7 +46,6 @@ export default function ProjectsCMS() {
     });
 
     const data = await response.json();
-
     if (data.url) {
       setProjects((prevProjects) => {
         const newProjects = [...prevProjects];
@@ -61,14 +60,14 @@ export default function ProjectsCMS() {
   const handleAddProject = () => {
     setProjects((prevProjects) => [
       ...prevProjects,
-      { title: '', description: '', gifUrl: '', videoUrl: '' },
+      { title: '', description: '', gifUrl: '', youtubeLink: '', githubLink: '' },
     ]);
-    inputFileRefs.current.push(null); // Add a new ref slot for the new project
+    inputFileRefs.current.push(null);
   };
 
   const handleRemoveProject = (index: number) => {
     setProjects((prevProjects) => prevProjects.filter((_, i) => i !== index));
-    inputFileRefs.current.splice(index, 1); // Remove the corresponding ref slot
+    inputFileRefs.current.splice(index, 1);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -117,7 +116,27 @@ export default function ProjectsCMS() {
                 type="text"
                 name="gifUrl"
                 value={project.gifUrl}
-                onChange={(e) => handleChange(index, e)} // Make gifUrl editable
+                onChange={(e) => handleChange(index, e)}
+                className="w-full p-2 border"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1">YouTube Link</label>
+              <input
+                type="text"
+                name="youtubeLink"
+                value={project.youtubeLink}
+                onChange={(e) => handleChange(index, e)} // Add YouTube input
+                className="w-full p-2 border"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1">GitHub Link</label>
+              <input
+                type="text"
+                name="githubLink"
+                value={project.githubLink}
+                onChange={(e) => handleChange(index, e)} // Add GitHub input
                 className="w-full p-2 border"
               />
             </div>
@@ -126,7 +145,7 @@ export default function ProjectsCMS() {
               <input
                 type="file"
                 ref={(el) => {
-                  inputFileRefs.current[index] = el; // Assign ref to corresponding input
+                  inputFileRefs.current[index] = el;
                 }}
                 accept="image/gif"
                 className="w-full p-2 border"
@@ -171,3 +190,4 @@ export default function ProjectsCMS() {
     </CMSLayout>
   );
 }
+

@@ -21,6 +21,8 @@ interface Props {
   image?: string;
   video?: string;
   gifUrl?: string; // Add GIF URL prop
+  youtubeLink?: string; // Add YouTube link prop
+  githubLink?: string; // Add GitHub link prop
   links?: readonly {
     icon: React.ReactNode;
     type: string;
@@ -41,6 +43,8 @@ export function ProjectCard({
   gifUrl, // Add GIF URL prop
   links,
   className,
+  youtubeLink,
+  githubLink
 }: Props) {
   return (
     <Card
@@ -107,6 +111,17 @@ export function ProjectCard({
         )}
       </CardContent>
       <CardFooter className="px-2 pb-2">
+        {/* YouTube and GitHub buttons */}
+        {youtubeLink && (
+          <Link href={youtubeLink} target="_blank">
+            <Badge className="flex gap-2 px-2 py-1 text-[10px] mr-3">YouTube</Badge>
+          </Link>
+        )}
+        {githubLink && (
+          <Link href={githubLink} target="_blank">
+            <Badge className="flex gap-2 px-2 py-1 text-[10px]">GitHub</Badge>
+          </Link>
+        )}
         {links && links.length > 0 && (
           <div className="flex flex-row flex-wrap items-start gap-1">
             {links?.map((link, idx) => (
