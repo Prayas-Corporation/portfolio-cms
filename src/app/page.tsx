@@ -29,6 +29,7 @@ const BLUR_FADE_DELAY = 0.4;
 
 export default function Page() {
   const [loading, setLoading] = useState(true); // Track loading state
+  const [progress, setProgress] = useState(0); // Track progress for loader
   const [heroData, setHeroData] = useState<any>({});
   const [summary, setSummary] = useState("");
   const [workData, setWorkData] = useState([]);
@@ -39,9 +40,40 @@ export default function Page() {
   const [contact, setContact] = useState<any>({});
 
   useEffect(() => {
+    if (loading) {
+      setProgress(0); // Reset progress to 0 when loading starts
+      let progressValue = 0;
+  
+      // Increment progress every 50ms
+      const interval = setInterval(() => {
+        if (progressValue < 95) { // Cap progress at 95%, final 5% reserved for data fetching completion
+          progressValue += 1;
+          setProgress(Math.floor(progressValue)); // Use Math.floor() to ensure it's always an integer
+        }
+      }, 50); // Update progress every 50ms for a smooth visual effect
+  
+      return () => clearInterval(interval); // Clear interval on component unmount
+    }
+  }, [loading]);
+  
+
+  // Minimum loader time, even if data loads quickly
+  useEffect(() => {
+    const minLoadingTime = 3000; // Set the minimum time for the loader (3 seconds)
+    const startTime = Date.now(); // Record the start time
+
     const fetchData = async () => {
       try {
-        const [heroRes, summaryRes, workRes, educationRes, skillsRes, projectsRes, hackathonsRes, contactRes] = await Promise.all([
+        const [
+          heroRes,
+          summaryRes,
+          workRes,
+          educationRes,
+          skillsRes,
+          projectsRes,
+          hackathonsRes,
+          contactRes,
+        ] = await Promise.all([
           fetch("/api/hero").then((res) => res.json()),
           fetch("/api/summary").then((res) => res.json()),
           fetch("/api/work").then((res) => res.json()),
@@ -52,20 +84,27 @@ export default function Page() {
           fetch("/api/contact").then((res) => res.json()),
         ]);
 
-        // Update all the state variables once the data is fetched
-        setHeroData(heroRes);
-        setSummary(summaryRes.summary);
-        setWorkData(workRes.work);
-        setEducationData(educationRes.education);
-        setSkills(skillsRes.skills);
-        setProjects(projectsRes.projects || []);
-        setHackathons(hackathonsRes.hackathons);
-        setContact(contactRes.contact);
+        // Simulate loader finishing after the remaining time
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(minLoadingTime - elapsedTime, 0);
 
-        setLoading(false); // Set loading to false after all data is fetched
+        setTimeout(() => {
+          // Set all data and complete loading after the minimum duration
+          setHeroData(heroRes);
+          setSummary(summaryRes.summary);
+          setWorkData(workRes.work);
+          setEducationData(educationRes.education);
+          setSkills(skillsRes.skills);
+          setProjects(projectsRes.projects || []);
+          setHackathons(hackathonsRes.hackathons);
+          setContact(contactRes.contact);
+          
+          setProgress(100); // Complete the progress to 100%
+          setLoading(false); // Stop loading after data is fetched
+        }, remainingTime);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setLoading(false); // Ensure to stop loading even if there is an error
+        setLoading(false); // Stop loading even if there is an error
       }
     };
 
@@ -88,7 +127,7 @@ setThemeValue(theme)
           <AnimatedCircularProgressBar
             max={100}
             min={0}
-            value={100}
+            value={Math.floor(progress)}
             gaugePrimaryColor="rgb(79 70 229)"
             gaugeSecondaryColor="rgba(0, 0, 0, 0.1)"
           />
