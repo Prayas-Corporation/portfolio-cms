@@ -1,4 +1,7 @@
 "use client";
+
+import { useEffect, useState } from "react";
+import AnimatedCircularProgressBar from "@/components/magicui/animated-circular-progress-bar"; // Import your loader
 import { DATA } from "@/data/resume";
 import { HackathonCard } from "@/components/hackathon-card";
 import BlurFade from "@/components/magicui/blur-fade";
@@ -8,48 +11,24 @@ import { ResumeCard } from "@/components/resume-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import IconCloud from "@/components/magicui/icon-cloud";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { useTheme } from "next-themes";
 import ShineBorder from "@/components/magicui/shine-border";
+
 const slugs = [
-  "typescript",
-  "javascript",
-  "dart",
-  "java",
-  "react",
-  "flutter",
-  "android",
-  "html5",
-  "css3",
-  "nodedotjs",
-  "express",
-  "nextdotjs",
-  "prisma",
-  "amazonaws",
-  "postgresql",
-  "firebase",
-  "nginx",
-  "vercel",
-  "testinglibrary",
-  "jest",
-  "cypress",
-  "docker",
-  "git",
-  "jira",
-  "github",
-  "gitlab",
-  "visualstudiocode",
-  "androidstudio",
-  "sonarqube",
-  "figma",
+  "typescript", "javascript", "dart", "java", "react", "flutter", "android",
+  "html5", "css3", "nodedotjs", "express", "nextdotjs", "prisma", "amazonaws",
+  "postgresql", "firebase", "nginx", "vercel", "testinglibrary", "jest",
+  "cypress", "docker", "git", "jira", "github", "gitlab", "visualstudiocode",
+  "androidstudio", "sonarqube", "figma",
 ];
 
 const BLUR_FADE_DELAY = 0.4;
 
 export default function Page() {
+  const [loading, setLoading] = useState(true); // Track loading state
   const [heroData, setHeroData] = useState<any>({});
   const [summary, setSummary] = useState("");
   const [workData, setWorkData] = useState([]);
@@ -60,54 +39,39 @@ export default function Page() {
   const [contact, setContact] = useState<any>({});
 
   useEffect(() => {
-    fetch("/api/hero")
-      .then((response) => response.json())
-      .then((data) => setHeroData(data))
-      .catch((error) =>
-        console.error("Error fetching hero section data:", error)
-      );
+    const fetchData = async () => {
+      try {
+        const [heroRes, summaryRes, workRes, educationRes, skillsRes, projectsRes, hackathonsRes, contactRes] = await Promise.all([
+          fetch("/api/hero").then((res) => res.json()),
+          fetch("/api/summary").then((res) => res.json()),
+          fetch("/api/work").then((res) => res.json()),
+          fetch("/api/education").then((res) => res.json()),
+          fetch("/api/skills").then((res) => res.json()),
+          fetch("/api/projects").then((res) => res.json()),
+          fetch("/api/hackathons").then((res) => res.json()),
+          fetch("/api/contact").then((res) => res.json()),
+        ]);
 
-    fetch("/api/summary")
-      .then((response) => response.json())
-      .then((data) => setSummary(data.summary))
-      .catch((error) => console.error("Error fetching summary data:", error));
+        // Update all the state variables once the data is fetched
+        setHeroData(heroRes);
+        setSummary(summaryRes.summary);
+        setWorkData(workRes.work);
+        setEducationData(educationRes.education);
+        setSkills(skillsRes.skills);
+        setProjects(projectsRes.projects || []);
+        setHackathons(hackathonsRes.hackathons);
+        setContact(contactRes.contact);
 
-    fetch("/api/work")
-      .then((response) => response.json())
-      .then((data) => setWorkData(data.work))
-      .catch((error) => console.error("Error fetching work data:", error));
+        setLoading(false); // Set loading to false after all data is fetched
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false); // Ensure to stop loading even if there is an error
+      }
+    };
 
-    fetch("/api/education")
-      .then((response) => response.json())
-      .then((data) => setEducationData(data.education))
-      .catch((error) => console.error("Error fetching education data:", error));
-
-    fetch("/api/skills")
-      .then((response) => response.json())
-      .then((data) => setSkills(data.skills))
-      .catch((error) => console.error("Error fetching skills data:", error));
-
-    fetch("/api/projects")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data, "chhhhhhhhhhhh"); // Check if videoUrl is present
-        setProjects(data.projects || []);
-      })
-      .catch((error) => console.error("Error fetching projects data:", error));
-
-    fetch("/api/hackathons")
-      .then((response) => response.json())
-      .then((data) => setHackathons(data.hackathons))
-      .catch((error) =>
-        console.error("Error fetching hackathons data:", error)
-      );
-
-    fetch("/api/contact")
-      .then((response) => response.json())
-      .then((data) => setContact(data.contact))
-      .catch((error) => console.error("Error fetching contact data:", error));
+    fetchData();
   }, []);
-  console.log(contact, "dsdsdsdssddssdsd");
+
   const { theme } = useTheme(); // Access theme (dark or light)
   const [themeValue, setThemeValue] = useState<any>(theme)
   useEffect(()=>{
@@ -115,104 +79,71 @@ setThemeValue(theme)
   },[theme])
   // const { theme } = useTheme(); // Access theme (dark or light)
   console.log(theme, "hfhfhhfhf")
+
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-10">
-      <section id="hero">
-        <div className="mx-auto w-full max-w-screen-xl space-y-8">
-          <div className="gap-2 flex justify-between items-center">
-            <div className="flex-col flex flex-1 space-y-1.5">
-              <BlurFadeText
-                delay={BLUR_FADE_DELAY}
-                className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
-                yOffset={8}
-                text={`Hi, I'm ${heroData.name || "there"} `}
-                // 👋
-              />
-              <BlurFadeText
-                className="max-w-[600px] md:text-xl"
-                delay={BLUR_FADE_DELAY}
-                text={heroData.description || "Welcome to my site!"}
-              />
-            </div>
-
-            <BlurFade delay={BLUR_FADE_DELAY}>
-              {/* <AvatarImage alt={heroData.name} src={heroData.avatarUrl} /> */}
-              {/* Render container only for screens larger than 545px */}
-              <div className="hidden sm:flex relative h-[300px] w-[300px] items-center justify-center overflow-hidden rounded-lg border-0 bg-background p-8">
-                {heroData.avatarUrl && (
-                  <IconCloud iconSlugs={slugs} heroData={heroData} />
-                )}
-              </div>
-
-              {/* Render Avatar for screens smaller than 545px */}
-              <div className="flex sm:hidden items-center justify-center">
-                {heroData.avatarUrl && (
-                  <Avatar className="size-28 border">
-                    <AvatarImage alt={heroData.name} src={heroData.avatarUrl} />
-                    <AvatarFallback>{heroData.initials}</AvatarFallback>
-                  </Avatar>
-                )}
-              </div>
-            </BlurFade>
-          </div>
+      {loading ? (
+        // Show the animated circular progress bar when loading is true
+        <div className="flex items-center justify-center min-h-[100dvh]">
+          <AnimatedCircularProgressBar
+            max={100}
+            min={0}
+            value={100}
+            gaugePrimaryColor="rgb(79 70 229)"
+            gaugeSecondaryColor="rgba(0, 0, 0, 0.1)"
+          />
         </div>
-      </section>
-      <section id="about" >
-        {/* <BlurFade delay={BLUR_FADE_DELAY * 3}>
-          <h2 className="text-xl font-bold mb-1">About</h2>
-        </BlurFade> */}
-        {/* <BlurFade delay={BLUR_FADE_DELAY * 4}>
-          <Markdown className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
-            {summary}
-          </Markdown>
-        </BlurFade> */}
+      ) : (
+        // Render the content once loading is false
+        <>
+          <section id="hero">
+            <div className="mx-auto w-full max-w-screen-xl space-y-8">
+              <div className="gap-2 flex justify-between items-center">
+                <div className="flex-col flex flex-1 space-y-1.5">
+                  <BlurFadeText
+                    delay={BLUR_FADE_DELAY}
+                    className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
+                    yOffset={8}
+                    text={`Hi, I'm ${heroData.name || "there"} `}
+                  />
+                  <BlurFadeText
+                    className="max-w-[600px] md:text-xl"
+                    delay={BLUR_FADE_DELAY}
+                    text={heroData.description || "Welcome to my site!"}
+                  />
+                </div>
 
-        {/* <BlurFade delay={BLUR_FADE_DELAY * 4}>
- <ShineBorder
-      
-        color={theme === "dark" ? "white" : "black"} // Adjust ShineBorder color based on theme
-      >
-         <Markdown className="pointer-events-none whitespace-pre-wrap text-center  leading-none prose max-w-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent sans text-sm font-light">
-                {summary}
+                <BlurFade delay={BLUR_FADE_DELAY}>
+                  <div className="hidden sm:flex relative h-[300px] w-[300px] items-center justify-center overflow-hidden rounded-lg border-0 bg-background p-8">
+                    {heroData.avatarUrl && (
+                      <IconCloud iconSlugs={slugs} heroData={heroData} />
+                    )}
+                  </div>
 
-              </Markdown>
-            
-      </ShineBorder>
-      </BlurFade> */}
+                  <div className="flex sm:hidden items-center justify-center">
+                    {heroData.avatarUrl && (
+                      <Avatar className="size-28 border">
+                        <AvatarImage alt={heroData.name} src={heroData.avatarUrl} />
+                        <AvatarFallback>{heroData.initials}</AvatarFallback>
+                      </Avatar>
+                    )}
+                  </div>
+                </BlurFade>
+              </div>
+            </div>
+          </section>
 
-        {/* <ShineBorder
-          className="relative  p-8 flex w-full flex-col items-center justify-center overflow-hidden rounded-lg  bg-background md:shadow-xl whitespace-pre-wrap text-center text-8xl"
-          color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
-        >
-          <Markdown className="prose max-w-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent sans font-light">
-            {summary}
-          </Markdown>
-        </ShineBorder> */}
-
-
-        <ShineBorder
-         className="relative  p-8 flex w-full flex-col items-center justify-center overflow-hidden rounded-lg  bg-background md:shadow-xl whitespace-pre-wrap text-center text-8xl"
-
-        color={themeValue === "dark" ? "black" : "white"} // Adjust ShineBorder color based on theme
-      >
-      <Markdown className="prose max-w-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent sans font-light">
-            {summary}
-          </Markdown>
-    </ShineBorder>
-
-
-
-        {/* <div className="relative flex p-8 w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background md:shadow-xl">
-          <span className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-8xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10">
-            <BlurFade delay={BLUR_FADE_DELAY * 4}>
-              <Markdown className="prose max-w-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent sans text-sm font-light">
+          <section id="about">
+            <ShineBorder
+              className="relative p-8 flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background md:shadow-xl whitespace-pre-wrap text-center text-8xl"
+              color={themeValue === "dark" ? "white" : "black"}
+            >
+              <Markdown className="prose max-w-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent sans font-light">
                 {summary}
               </Markdown>
-            </BlurFade>
-          </span>
-          <BorderBeam size={250} duration={12} delay={9} />
-        </div> */}
-      </section>
+            </ShineBorder>
+          </section>
+
 
       <section id="work">
         <div className="flex min-h-0 flex-col gap-y-3">
@@ -393,6 +324,9 @@ setThemeValue(theme)
           </BlurFade>
         </div>
       </section>
+    
+    </>
+      )}
     </main>
   );
 }
