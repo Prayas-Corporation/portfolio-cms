@@ -10,8 +10,44 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
+import IconCloud from "@/components/magicui/icon-cloud";
+import { BorderBeam } from "@/components/magicui/border-beam";
+import { useTheme } from "next-themes";
+import ShineBorder from "@/components/magicui/shine-border";
+const slugs = [
+  "typescript",
+  "javascript",
+  "dart",
+  "java",
+  "react",
+  "flutter",
+  "android",
+  "html5",
+  "css3",
+  "nodedotjs",
+  "express",
+  "nextdotjs",
+  "prisma",
+  "amazonaws",
+  "postgresql",
+  "firebase",
+  "nginx",
+  "vercel",
+  "testinglibrary",
+  "jest",
+  "cypress",
+  "docker",
+  "git",
+  "jira",
+  "github",
+  "gitlab",
+  "visualstudiocode",
+  "androidstudio",
+  "sonarqube",
+  "figma",
+];
 
-const BLUR_FADE_DELAY = 0.2;
+const BLUR_FADE_DELAY = 0.4;
 
 export default function Page() {
   const [heroData, setHeroData] = useState<any>({});
@@ -72,14 +108,21 @@ export default function Page() {
       .catch((error) => console.error("Error fetching contact data:", error));
   }, []);
   console.log(contact, "dsdsdsdssddssdsd");
+  const { theme } = useTheme(); // Access theme (dark or light)
+  const [themeValue, setThemeValue] = useState<any>(theme)
+  useEffect(()=>{
+setThemeValue(theme)
+  },[theme])
+  // const { theme } = useTheme(); // Access theme (dark or light)
+  console.log(theme, "hfhfhhfhf")
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-10">
       <section id="hero">
-        <div className="mx-auto w-full max-w-2xl space-y-8">
-          <div className="gap-2 flex justify-between">
+        <div className="mx-auto w-full max-w-screen-xl space-y-8">
+          <div className="gap-2 flex justify-between items-center">
             <div className="flex-col flex flex-1 space-y-1.5">
               <BlurFadeText
-                delay={BLUR_FADE_DELAY }
+                delay={BLUR_FADE_DELAY}
                 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
                 yOffset={8}
                 text={`Hi, I'm ${heroData.name || "there"} `}
@@ -93,23 +136,82 @@ export default function Page() {
             </div>
 
             <BlurFade delay={BLUR_FADE_DELAY}>
-              <Avatar className="size-28 border">
-                <AvatarImage alt={heroData.name} src={heroData.avatarUrl} />
-                <AvatarFallback>{heroData.initials}</AvatarFallback>
-              </Avatar>
+              {/* <AvatarImage alt={heroData.name} src={heroData.avatarUrl} /> */}
+              {/* Render container only for screens larger than 545px */}
+              <div className="hidden sm:flex relative h-[300px] w-[300px] items-center justify-center overflow-hidden rounded-lg border-0 bg-background p-8">
+                {heroData.avatarUrl && (
+                  <IconCloud iconSlugs={slugs} heroData={heroData} />
+                )}
+              </div>
+
+              {/* Render Avatar for screens smaller than 545px */}
+              <div className="flex sm:hidden items-center justify-center">
+                {heroData.avatarUrl && (
+                  <Avatar className="size-28 border">
+                    <AvatarImage alt={heroData.name} src={heroData.avatarUrl} />
+                    <AvatarFallback>{heroData.initials}</AvatarFallback>
+                  </Avatar>
+                )}
+              </div>
             </BlurFade>
           </div>
         </div>
       </section>
-      <section id="about">
-        <BlurFade delay={BLUR_FADE_DELAY * 3}>
-          <h2 className="text-xl font-bold">About</h2>
-        </BlurFade>
-        <BlurFade delay={BLUR_FADE_DELAY * 4}>
+      <section id="about" >
+        {/* <BlurFade delay={BLUR_FADE_DELAY * 3}>
+          <h2 className="text-xl font-bold mb-1">About</h2>
+        </BlurFade> */}
+        {/* <BlurFade delay={BLUR_FADE_DELAY * 4}>
           <Markdown className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
             {summary}
           </Markdown>
-        </BlurFade>
+        </BlurFade> */}
+
+        {/* <BlurFade delay={BLUR_FADE_DELAY * 4}>
+ <ShineBorder
+      
+        color={theme === "dark" ? "white" : "black"} // Adjust ShineBorder color based on theme
+      >
+         <Markdown className="pointer-events-none whitespace-pre-wrap text-center  leading-none prose max-w-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent sans text-sm font-light">
+                {summary}
+
+              </Markdown>
+            
+      </ShineBorder>
+      </BlurFade> */}
+
+        {/* <ShineBorder
+          className="relative  p-8 flex w-full flex-col items-center justify-center overflow-hidden rounded-lg  bg-background md:shadow-xl whitespace-pre-wrap text-center text-8xl"
+          color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+        >
+          <Markdown className="prose max-w-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent sans font-light">
+            {summary}
+          </Markdown>
+        </ShineBorder> */}
+
+
+        <ShineBorder
+         className="relative  p-8 flex w-full flex-col items-center justify-center overflow-hidden rounded-lg  bg-background md:shadow-xl whitespace-pre-wrap text-center text-8xl"
+
+        color={themeValue === "dark" ? "black" : "white"} // Adjust ShineBorder color based on theme
+      >
+      <Markdown className="prose max-w-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent sans font-light">
+            {summary}
+          </Markdown>
+    </ShineBorder>
+
+
+
+        {/* <div className="relative flex p-8 w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background md:shadow-xl">
+          <span className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-8xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10">
+            <BlurFade delay={BLUR_FADE_DELAY * 4}>
+              <Markdown className="prose max-w-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent sans text-sm font-light">
+                {summary}
+              </Markdown>
+            </BlurFade>
+          </span>
+          <BorderBeam size={250} duration={12} delay={9} />
+        </div> */}
       </section>
 
       <section id="work">
@@ -213,7 +315,7 @@ export default function Page() {
                   gifUrl={project.gifUrl} // Pass gifUrl to ProjectCard
                   links={project.links}
                   youtubeLink={project.youtubeLink} // Pass YouTube link
-                  githubLink={project.githubLink} 
+                  githubLink={project.githubLink}
                 />
               </BlurFade>
             ))}
@@ -227,13 +329,15 @@ export default function Page() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
-                Licenses & Certificate.
+                  Licenses & Certificate.
                 </div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                Certified Skills & Expertise
+                  Certified Skills & Expertise
                 </h2>
                 <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                I have earned licenses and certifications over the years. These certifications have helped me develop a deep understanding of various technologies and domains. 
+                  I have earned licenses and certifications over the years.
+                  These certifications have helped me develop a deep
+                  understanding of various technologies and domains.
                 </p>
               </div>
             </div>
@@ -271,18 +375,18 @@ export default function Page() {
                 Get in Touch
               </h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Want to chat? Just shoot me a dm{" "}
+                Want to chat? Just shoot me a dm { " "}
                 {contact?.social?.Youtube?.url ? (
-  <Link
-    href={contact.social.Youtube.url}
-    className="text-blue-500 hover:underline"
-  >
-    with a direct question on YouTube
-  </Link>
-) : (
-  <span>with a direct question on YouTube</span> // Fallback in case the URL is undefined
-)}
-                and I&apos;ll respond whenever I can. I will ignore all
+                  <Link
+                    href={contact.social.LinkedIn.url}
+                    className="text-blue-500 hover:underline"
+                  >
+                    with a direct question on LinkedIn
+                  </Link>
+                ) : (
+                  <span> with a direct question on LinkedIn {" "}</span> // Fallback in case the URL is undefined
+                )}
+                {" "} and I&apos;ll respond whenever I can. I will ignore all
                 soliciting.
               </p>
             </div>
