@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import CMSLayout from '@/components/CMSLayout';
+import { Box, Button, TextField, Typography, Grid, Paper } from '@mui/material';
 
 export default function ContactCMS() {
-  // Initialize state with default social structure
   const [contactData, setContactData] = useState<any>({
     social: {
       GitHub: { url: '' },
@@ -18,19 +18,18 @@ export default function ContactCMS() {
       .then((res) => res.json())
       .then((data) => {
         if (data && data.contact && data.contact.social) {
-          // Merge fetched data with default structure to prevent missing keys
+          // Merge fetched data with default structure
           setContactData((prevData: any) => ({
             ...prevData,
             social: {
               ...prevData.social,
-              ...data.contact.social, // Merge with fetched social data
+              ...data.contact.social,
             },
           }));
         }
       })
       .catch((error) => {
         console.error("Error fetching contact data:", error);
-        // Optional: You can set a fallback error state here if needed
       });
   }, []);
 
@@ -50,7 +49,6 @@ export default function ContactCMS() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    // Only send the updated social media URLs
     const updatedSocialUrls = Object.keys(contactData.social).reduce((acc: any, platform: any) => {
       acc[platform] = { url: contactData.social[platform]?.url };
       return acc;
@@ -61,7 +59,7 @@ export default function ContactCMS() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ contact: { social: updatedSocialUrls } }), // Send only the updated URLs
+      body: JSON.stringify({ contact: { social: updatedSocialUrls } }),
     })
       .then((res) => res.json())
       .then((data) => alert(data.message));
@@ -69,28 +67,75 @@ export default function ContactCMS() {
 
   return (
     <CMSLayout>
-      <h1 className="text-2xl font-bold mb-4">Update Social Media URLs</h1>
-      <form onSubmit={handleSubmit}>
-        {Object.keys(contactData.social).map((platform: any) => (
-          <div key={platform} className="mb-4">
-            <h3 className="font-semibold mb-2">{platform}</h3>
-            <label className="block mb-1">URL</label>
-            <input
-              type="text"
-              name="url"
-              value={contactData.social[platform]?.url || ''}
-              onChange={(e) => handleSocialChange(platform, e)}
-              className="w-full p-2 border"
-            />
-          </div>
-        ))}
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Update URLs
-        </button>
-      </form>
+      <Box
+        sx={{
+          maxWidth: 600,
+          mx: 'auto',
+          mt: 4,
+          p: 3,
+          bgcolor: 'background.paper',
+          borderRadius: 2,
+          boxShadow: 3,
+        }}
+        component={Paper}
+        elevation={3}
+      >
+        <Typography variant="h4" component="h1" gutterBottom className="text-center font-bold">
+          Update Social Media URLs
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            {Object.keys(contactData.social).map((platform: any) => (
+              <Grid item xs={12} key={platform}>
+                <TextField
+                  fullWidth
+                  label={`${platform} URL`}
+                  name="url"
+                  value={contactData.social[platform]?.url || ''}
+                  onChange={(e) => handleSocialChange(platform, e)}
+                  variant="outlined"
+                  InputLabelProps={{
+                    style: { fontWeight: 'bold' },
+                  }}
+                  sx={{
+                    '& input': {
+                      color: 'text.primary',
+                      py: 1.5,
+                    },
+                    '& label': {
+                      color: 'text.secondary',
+                    },
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      '&.Mui-focused fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <Box sx={{ mt: 3, textAlign: 'center' }}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{
+                py: 1.5,
+                px: 4,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                '&:hover': {
+                  backgroundColor: 'primary.dark',
+                },
+              }}
+            >
+              Update URLs
+            </Button>
+          </Box>
+        </form>
+      </Box>
     </CMSLayout>
   );
 }

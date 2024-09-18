@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import CMSLayout from '@/components/CMSLayout';
+import { Box, Button, TextField, Typography, Grid, Paper } from '@mui/material';
 
 // Define the type for education experience
 type EducationExperience = {
@@ -8,7 +9,7 @@ type EducationExperience = {
   start: string;
   end: string;
   description: string;
-  logoUrl?: string; // Add the logoUrl property
+  logoUrl?: string;
 };
 
 export default function EducationCMS() {
@@ -76,94 +77,125 @@ export default function EducationCMS() {
 
   return (
     <CMSLayout>
-      <h1 className="text-2xl font-bold mb-4">Update Education</h1>
-      <form onSubmit={handleSubmit}>
-        {educationData.map((education, index) => (
-          <div key={index} className="mb-6">
-            <h3 className="font-semibold mb-2">School {index + 1}</h3>
-            <div className="mb-4">
-              <label className="block mb-1">School</label>
-              <input
-                type="text"
-                name="school"
-                value={education.school}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Degree</label>
-              <input
-                type="text"
-                name="degree"
-                value={education.degree}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Start Date</label>
-              <input
-                type="text"
-                name="start"
-                value={education.start}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">End Date</label>
-              <input
-                type="text"
-                name="end"
-                value={education.end}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Description</label>
-              <textarea
-                name="description"
-                value={education.description}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              ></textarea>
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Logo</label>
-              <input
-                type="file"
-                onChange={(e) => handleFileChange(index, e)}
-                className="w-full p-2 border"
-              />
-              {education.logoUrl && (
-                <img src={education.logoUrl} alt="Logo Preview" className="mt-2 h-20" />
-              )}
-            </div>
-            <button
-              type="button"
-              onClick={() => handleRemoveEducation(index)}
-              className="bg-red-500 text-white py-1 px-3 rounded"
+      <Box component={Paper} elevation={3} sx={{ p: 4, mx: 'auto', mt: 4, maxWidth: '900px', marginBottom:10 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Update Education
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          {educationData.map((education, index) => (
+            <Box key={index} sx={{ mb: 6 }}>
+              <Typography variant="h6" gutterBottom>
+                School {index + 1}
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="School"
+                    name="school"
+                    value={education.school}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Degree"
+                    name="degree"
+                    value={education.degree}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Start Date"
+                    name="start"
+                    value={education.start}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="End Date"
+                    name="end"
+                    value={education.end}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Description"
+                    name="description"
+                    value={education.description}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                    multiline
+                    rows={4}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    component="label"
+                    sx={{ mr: 2, mt: 2 }}
+                  >
+                    Upload Logo
+                    <input hidden type="file" onChange={(e) => handleFileChange(index, e)} />
+                  </Button>
+                  {education.logoUrl && (
+                    <img
+                      src={education.logoUrl}
+                      alt="Logo Preview"
+                      className="mt-2"
+                      style={{ height: '80px', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
+                    />
+                  )}
+                </Grid>
+              </Grid>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => handleRemoveEducation(index)}
+                sx={{ mt: 2 }}
+              >
+                Remove
+              </Button>
+            </Box>
+          ))}
+          <Box sx={{ textAlign: 'center', mt: 4 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddEducation}
+             
             >
-              Remove
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={handleAddEducation}
-          className="bg-green-500 text-white py-2 px-4 rounded mb-4"
-        >
-          Add Education
-        </button>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Update
-        </button>
-      </form>
+              Add Education
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              sx={{ ml: 2 }}
+            >
+              Update
+            </Button>
+          </Box>
+        </form>
+      </Box>
     </CMSLayout>
   );
 }

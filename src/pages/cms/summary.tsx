@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import CMSLayout from '@/components/CMSLayout';
+import { Box, Button, TextField, Typography } from '@mui/material';
 
 export default function SummaryCMS() {
   const [summary, setSummary] = useState('');
@@ -10,11 +11,11 @@ export default function SummaryCMS() {
       .then((data) => setSummary(data.summary || ''));
   }, []);
 
-  const handleChange = (e:any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSummary(e.target.value);
   };
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     fetch('/api/summary', {
       method: 'PUT',
@@ -29,24 +30,33 @@ export default function SummaryCMS() {
 
   return (
     <CMSLayout>
-      <h1 className="text-2xl font-bold mb-4">Update Summary</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block mb-1">Summary</label>
-          <textarea
+      <Box sx={{ maxWidth: 600, mx: 'auto', p: 2 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Update Summary
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Summary"
             name="summary"
             value={summary}
             onChange={handleChange}
-            className="w-full p-2 border"
-          ></textarea>
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Update
-        </button>
-      </form>
+            multiline
+            rows={6}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            Update
+          </Button>
+        </form>
+      </Box>
     </CMSLayout>
   );
 }

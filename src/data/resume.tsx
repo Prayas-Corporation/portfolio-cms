@@ -306,7 +306,7 @@ export const DATA = {
     {
       title: "Hack Western 5",
       dates: "November 23rd - 25th, 2018",
-      location: "London, Ontario",
+      location: "",
       description:
         "Developed a mobile application which delivered bedtime stories to children using augmented reality.",
       image:

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import CMSLayout from '@/components/CMSLayout';
+import { Box, Button, TextField, Typography, IconButton, Grid, Card, CardContent, CardActions } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function SkillsCMS() {
   const [skills, setSkills] = useState<string[]>([]);
@@ -11,10 +14,7 @@ export default function SkillsCMS() {
       .catch((error) => console.error('Error fetching skills data:', error));
   }, []);
 
-  const handleChange = (
-    index: number,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setSkills((prevSkills) => {
       const newSkills = [...prevSkills];
@@ -47,40 +47,55 @@ export default function SkillsCMS() {
 
   return (
     <CMSLayout>
-      <h1 className="text-2xl font-bold mb-4">Update Skills</h1>
-      <form onSubmit={handleSubmit}>
-        {skills.map((skill, index) => (
-          <div key={index} className="mb-4">
-            <label className="block mb-1">Skill {index + 1}</label>
-            <input
-              type="text"
-              value={skill}
-              onChange={(e) => handleChange(index, e)}
-              className="w-full p-2 border"
-            />
-            <button
-              type="button"
-              onClick={() => handleRemoveSkill(index)}
-              className="bg-red-500 text-white py-1 px-3 rounded mt-2"
+      <Box sx={{ maxWidth: 600, mx: 'auto', p: 2 , marginBottom:10}}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Update Skills
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          {skills.map((skill, index) => (
+            <Card key={index} sx={{ mb: 3 }}>
+              <CardContent>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item xs={10}>
+                    <TextField
+                      fullWidth
+                      label={`Skill ${index + 1}`}
+                      value={skill}
+                      onChange={(e:any) => handleChange(index, e)}
+                      variant="outlined"
+                      margin="normal"
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <IconButton
+                      aria-label="delete"
+                      color="error"
+                      onClick={() => handleRemoveSkill(index)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          ))}
+
+          <Box sx={{ alignItems: 'center' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              onClick={handleAddSkill}
+            
             >
-              Remove
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={handleAddSkill}
-          className="bg-green-500 text-white py-2 px-4 rounded mb-4"
-        >
-          Add Skill
-        </button>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Update
-        </button>
-      </form>
+              Add Skill
+            </Button>
+            <Button  sx={{ ml: 2 }} type="submit" variant="contained" color="secondary">
+              Update
+            </Button>
+          </Box>
+        </form>
+      </Box>
     </CMSLayout>
   );
 }

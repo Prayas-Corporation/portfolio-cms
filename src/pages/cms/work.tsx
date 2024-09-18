@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
+import { Box, Button, TextField, Typography, Avatar } from '@mui/material';
 import CMSLayout from '@/components/CMSLayout';
 
-// Define the type for work experience
 type WorkExperience = {
   company: string;
   title: string;
   start: string;
   end: string;
   description: string;
-  logoUrl?: string; // Add the logoUrl property
+  logoUrl?: string;
 };
 
 export default function WorkCMS() {
@@ -73,94 +73,111 @@ export default function WorkCMS() {
 
   return (
     <CMSLayout>
-      <h1 className="text-2xl font-bold mb-4">Update Work Experience</h1>
-      <form onSubmit={handleSubmit}>
-        {workData.map((work, index) => (
-          <div key={index} className="mb-6">
-            <h3 className="font-semibold mb-2">Job {index + 1}</h3>
-            <div className="mb-4">
-              <label className="block mb-1">Company</label>
-              <input
-                type="text"
+      <Box sx={{ maxWidth: 800, mx: 'auto', p: 2, marginBottom:10 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Update Work Experience
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          {workData.map((work, index) => (
+            <Box key={index} sx={{ mb: 6 }}>
+              <Typography variant="h6" component="h3" gutterBottom>
+                Job {index + 1}
+              </Typography>
+              <TextField
+                fullWidth
+                label="Company"
                 name="company"
                 value={work.company}
                 onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
+                margin="normal"
+                variant="outlined"
               />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Title</label>
-              <input
-                type="text"
+              <TextField
+                fullWidth
+                label="Title"
                 name="title"
                 value={work.title}
                 onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
+                margin="normal"
+                variant="outlined"
               />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Start Date</label>
-              <input
-                type="text"
+              <TextField
+                fullWidth
+                label="Start Date"
                 name="start"
                 value={work.start}
                 onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
+                margin="normal"
+                variant="outlined"
               />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">End Date</label>
-              <input
-                type="text"
+              <TextField
+                fullWidth
+                label="End Date"
                 name="end"
                 value={work.end}
                 onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
+                margin="normal"
+                variant="outlined"
               />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Description</label>
-              <textarea
+              <TextField
+                fullWidth
+                label="Description"
                 name="description"
                 value={work.description}
                 onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              ></textarea>
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Logo</label>
-              <input
-                type="file"
-                onChange={(e) => handleFileChange(index, e)}
-                className="w-full p-2 border"
+                margin="normal"
+                variant="outlined"
+                multiline
+                rows={4}
               />
-              {work.logoUrl && (
-                <img src={work.logoUrl} alt="Logo Preview" className="mt-2 h-20" />
-              )}
-            </div>
-            <button
-              type="button"
-              onClick={() => handleRemoveExperience(index)}
-              className="bg-red-500 text-white py-1 px-3 rounded"
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={handleAddExperience}
-          className="bg-green-500 text-white py-2 px-4 rounded mb-4"
-        >
-          Add Experience
-        </button>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Update
-        </button>
-      </form>
+              <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                <Button
+                  variant="contained"
+                  component="label"
+                  sx={{ mr: 2 }}
+                >
+                  Upload Logo
+                  <input hidden type="file" onChange={(e) => handleFileChange(index, e)} />
+                </Button>
+                {work.logoUrl && (
+                  <Avatar
+                    src={work.logoUrl}
+                    alt="Logo Preview"
+                    sx={{ width: 80, height: 80 }}
+                  />
+                )}
+              </Box>
+              <Button
+                type="button"
+                variant="contained"
+                color="error"
+                onClick={() => handleRemoveExperience(index)}
+                sx={{ mt: 2 }}
+              >
+                Remove
+              </Button>
+            </Box>
+          ))}
+          <Button
+            type="button"
+            variant="contained"
+            color="success"
+            onClick={handleAddExperience}
+            sx={{ mt: 2 }}
+          >
+            Add Experience
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 4 }}
+          >
+            Update
+          </Button>
+        </form>
+      </Box>
     </CMSLayout>
   );
 }

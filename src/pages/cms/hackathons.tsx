@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import CMSLayout from '@/components/CMSLayout';
+import { Box, Button, TextField, Typography, Grid, Paper } from '@mui/material';
 
 export default function HackathonsCMS() {
   const [hackathons, setHackathons] = useState<{ title: string; description: string; [key: string]: string }[]>([]);
@@ -50,54 +51,76 @@ export default function HackathonsCMS() {
 
   return (
     <CMSLayout>
-      <h1 className="text-2xl font-bold mb-4">Update Hackathons</h1>
-      <form onSubmit={handleSubmit}>
-        {hackathons.map((hackathon, index) => (
-          <div key={index} className="mb-6">
-            <h3 className="font-semibold mb-2">Hackathon {index + 1}</h3>
-            <div className="mb-4">
-              <label className="block mb-1">Title</label>
-              <input
-                type="text"
-                name="title"
-                value={hackathon.title}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Description</label>
-              <textarea
-                name="description"
-                value={hackathon.description}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              ></textarea>
-            </div>
-            {/* Add other fields as needed */}
-            <button
-              type="button"
-              onClick={() => handleRemoveHackathon(index)}
-              className="bg-red-500 text-white py-1 px-3 rounded mt-2"
+      <Box component={Paper} elevation={3} sx={{ p: 4, mx: 'auto', mt: 4, maxWidth: '900px' }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Update Certificates
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          {hackathons.map((hackathon, index) => (
+            <Box key={index} sx={{ mb: 6 }}>
+              <Typography variant="h6" gutterBottom>
+               Certificates {index + 1}
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Title"
+                    name="title"
+                    value={hackathon.title}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Description"
+                    name="description"
+                    value={hackathon.description}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                    multiline
+                    rows={4}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => handleRemoveHackathon(index)}
+                    sx={{ mt: 2 }}
+                  >
+                    Remove Certificates
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          ))}
+          <Box sx={{ textAlign: 'center', mb:4 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddHackathon}
+             
             >
-              Remove Hackathon
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={handleAddHackathon}
-          className="bg-green-500 text-white py-2 px-4 rounded mb-4"
-        >
-          Add Hackathon
-        </button>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Update
-        </button>
-      </form>
+              Add Certificates
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              sx={{ ml: 2 }}
+            >
+              Update
+            </Button>
+          </Box>
+        </form>
+      </Box>
     </CMSLayout>
   );
 }

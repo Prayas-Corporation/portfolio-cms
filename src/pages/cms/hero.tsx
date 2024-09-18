@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
+import { Box, Button, TextField, Typography, Avatar } from '@mui/material';
+import { PhotoCamera } from '@mui/icons-material';
 import CMSLayout from '@/components/CMSLayout';
 
 interface HeroData {
@@ -45,7 +47,6 @@ export default function HeroCMS() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    // Destructure to exclude _id from the update data
     const { _id, ...updateData } = heroData;
 
     fetch('/api/hero', {
@@ -67,59 +68,83 @@ export default function HeroCMS() {
 
   return (
     <CMSLayout>
-      <h1 className="text-2xl font-bold mb-4">Update Hero Section</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block mb-1">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={heroData.name}
-            onChange={handleChange}
-            className="w-full p-2 border"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Description</label>
-          <textarea
-            name="description"
-            value={heroData.description}
-            onChange={handleChange}
-            className="w-full p-2 border"
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Avatar URL</label>
-          <input
-            type="text"
-            name="avatarUrl"
-            value={heroData.avatarUrl}
-            onChange={handleChange}
-            className="w-full p-2 border"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Upload Profile Image</label>
-          <input
-            type="file"
-            onChange={handleFileChange}
-            className="w-full p-2 border"
-          />
+      <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, mx: 'auto', p: 2 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Update Your Section
+        </Typography>
+
+        <TextField
+          fullWidth
+          label="Name"
+          name="name"
+          value={heroData.name}
+          onChange={handleChange}
+          margin="normal"
+          variant="outlined"
+          required
+        />
+
+        <TextField
+          fullWidth
+          label="Description"
+          name="description"
+          value={heroData.description}
+          onChange={handleChange}
+          margin="normal"
+          variant="outlined"
+          multiline
+          rows={4}
+          required
+        />
+
+        <TextField
+          fullWidth
+          label="Avatar URL"
+          name="avatarUrl"
+          value={heroData.avatarUrl}
+          onChange={handleChange}
+          margin="normal"
+          variant="outlined"
+          placeholder="Paste image URL or upload below"
+        />
+
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+          <Button
+            variant="contained"
+            component="label"
+            startIcon={<PhotoCamera />}
+            sx={{ mr: 2 }}
+          >
+            Upload Profile Image
+            <input hidden type="file" onChange={handleFileChange} />
+          </Button>
           {heroData.avatarUrl && (
-            <img
+            <Avatar
               src={heroData.avatarUrl}
               alt="Profile"
-              className="mt-4 w-32 h-32 object-cover rounded-full"
+              sx={{
+                width: 80,
+                height: 80,
+                boxShadow: 3,
+                transition: 'transform 0.3s',
+                '&:hover': {
+                  transform: 'scale(1.1)',
+                },
+              }}
             />
           )}
-        </div>
-        <button
+        </Box>
+
+        <Button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
+          fullWidth
+          variant="contained"
+          color="primary"
+          sx={{ mt: 3 }}
         >
           Update
-        </button>
-      </form>
+        </Button>
+      </Box>
     </CMSLayout>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import CMSLayout from '@/components/CMSLayout';
+import { Box, Button, TextField, Typography, Card, CardContent, CardActions, Grid } from '@mui/material';
 
 type Project = {
   title: string;
@@ -7,7 +8,7 @@ type Project = {
   gifUrl?: string;
   videoUrl?: string;
   youtubeLink?: string; // Add YouTube link prop
-  githubLink?: string; 
+  githubLink?: string; // Add GitHub link prop
 };
 
 export default function ProjectsCMS() {
@@ -86,108 +87,120 @@ export default function ProjectsCMS() {
 
   return (
     <CMSLayout>
-      <h1 className="text-2xl font-bold mb-4">Update Projects</h1>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Update Projects
+      </Typography>
       <form onSubmit={handleSubmit}>
         {projects.map((project, index) => (
-          <div key={index} className="mb-6">
-            <h3 className="font-semibold mb-2">Project {index + 1}</h3>
-            <div className="mb-4">
-              <label className="block mb-1">Title</label>
-              <input
-                type="text"
-                name="title"
-                value={project.title}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Description</label>
-              <textarea
-                name="description"
-                value={project.description}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              ></textarea>
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">GIF URL</label>
-              <input
-                type="text"
-                name="gifUrl"
-                value={project.gifUrl}
-                onChange={(e) => handleChange(index, e)}
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">YouTube Link</label>
-              <input
-                type="text"
-                name="youtubeLink"
-                value={project.youtubeLink}
-                onChange={(e) => handleChange(index, e)} // Add YouTube input
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">GitHub Link</label>
-              <input
-                type="text"
-                name="githubLink"
-                value={project.githubLink}
-                onChange={(e) => handleChange(index, e)} // Add GitHub input
-                className="w-full p-2 border"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Upload GIF</label>
-              <input
-                type="file"
-                ref={(el) => {
-                  inputFileRefs.current[index] = el;
-                }}
-                accept="image/gif"
-                className="w-full p-2 border"
-              />
-              <button
-                type="button"
-                onClick={(e) => handleGifUpload(index, e)}
-                className="bg-blue-500 text-white py-2 px-4 rounded mt-2"
+          <Card key={index} sx={{ mb: 4 }}>
+            <CardContent >
+              <Typography variant="h6" gutterBottom>
+                Project {index + 1}
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Title"
+                    name="title"
+                    value={project.title}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="YouTube Link"
+                    name="youtubeLink"
+                    value={project.youtubeLink}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Description"
+                    name="description"
+                    value={project.description}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="GitHub Link"
+                    name="githubLink"
+                    value={project.githubLink}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="GIF URL"
+                    name="gifUrl"
+                    value={project.gifUrl}
+                    onChange={(e) => handleChange(index, e)}
+                    variant="outlined"
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    component="label"
+                    sx={{ mt: 2 }}
+                  >
+                    Upload GIF
+                    <input
+                      hidden
+                      type="file"
+                      ref={(el) => {
+                        inputFileRefs.current[index] = el;
+                      }}
+                      accept="image/gif"
+                    />
+                  </Button>
+                  {project.gifUrl && (
+                    <img
+                      src={project.gifUrl}
+                      alt="GIF Preview"
+                      className="w-full h-auto mt-2"
+                    />
+                  )}
+                </Grid>
+              </Grid>
+            </CardContent>
+            <CardActions>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => handleRemoveProject(index)}
               >
-                Upload GIF
-              </button>
-            </div>
-            {project.gifUrl && (
-              <div className="mb-4">
-                <label className="block mb-1">GIF Preview</label>
-                <img src={project.gifUrl} alt="GIF Preview" className="w-full h-auto" />
-              </div>
-            )}
-            <button
-              type="button"
-              onClick={() => handleRemoveProject(index)}
-              className="bg-red-500 text-white py-1 px-3 rounded mt-2"
-            >
-              Remove Project
-            </button>
-          </div>
+                Remove Project
+              </Button>
+            </CardActions>
+          </Card>
         ))}
-        <button
-          type="button"
-          onClick={handleAddProject}
-          className="bg-green-500 text-white py-2 px-4 rounded mb-4"
-        >
-          Add Project
-        </button>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Update
-        </button>
+        <Box sx={{ textAlign: 'center',marginBottom:10, alignItems:"center" }}>
+          <Button variant="contained" color="primary" onClick={handleAddProject} >
+            Add Project
+          </Button>
+          <Button type="submit" variant="contained" color="secondary" sx={{ ml: 2 }}>
+            Update
+          </Button>
+        </Box>
       </form>
     </CMSLayout>
   );
 }
-
