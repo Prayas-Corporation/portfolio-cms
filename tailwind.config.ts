@@ -22,6 +22,12 @@ const config = {
      
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        
+        nanum: ['"Nanum Brush Script"', 'cursive'],
+        poppins: ['Poppins', 'sans-serif'],
+        playfair: ['Playfair Display', 'serif'],
+        roboto: ['Roboto', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
       },
       
       colors: {

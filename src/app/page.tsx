@@ -136,7 +136,7 @@ setThemeValue(theme)
         // Render the content once loading is false
         <>
           <section id="hero">
-            <div className="mx-auto w-full max-w-screen-xl space-y-8">
+            <div className="mx-auto w-full max-w-screen-xl ">
               <div className="gap-2 flex justify-between items-center">
                 <div className="flex-col flex flex-1 space-y-1.5">
                   <BlurFadeText
@@ -173,6 +173,7 @@ setThemeValue(theme)
           </section>
 
           <section id="about">
+          <BlurFade delay={BLUR_FADE_DELAY }>
             <ShineBorder
               className="relative p-8 flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background md:shadow-xl whitespace-pre-wrap text-center text-8xl"
               color={themeValue === "dark" ? "white" : "black"}
@@ -181,12 +182,13 @@ setThemeValue(theme)
                 {summary}
               </Markdown>
             </ShineBorder>
+            </BlurFade>
           </section>
 
 
       <section id="work">
         <div className="flex min-h-0 flex-col gap-y-3">
-          <BlurFade delay={BLUR_FADE_DELAY * 5}>
+          <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <h2 className="text-xl font-bold">Work Experience</h2>
           </BlurFade>
           {workData.map((work: any, id) => (
@@ -212,7 +214,7 @@ setThemeValue(theme)
 
       <section id="education">
         <div className="flex min-h-0 flex-col gap-y-3">
-          <BlurFade delay={BLUR_FADE_DELAY * 7}>
+          <BlurFade delay={BLUR_FADE_DELAY * 3}>
             <h2 className="text-xl font-bold">Education</h2>
           </BlurFade>
           {educationData.map((education: any, id) => (
@@ -236,7 +238,7 @@ setThemeValue(theme)
 
       <section id="skills">
         <div className="flex min-h-0 flex-col gap-y-3">
-          <BlurFade delay={BLUR_FADE_DELAY * 9}>
+          <BlurFade delay={BLUR_FADE_DELAY * 4}>
             <h2 className="text-xl font-bold">Skills</h2>
           </BlurFade>
           <div className="flex flex-wrap gap-1">
@@ -251,7 +253,7 @@ setThemeValue(theme)
 
       <section id="projects">
         <div className="space-y-12 w-full py-12">
-          <BlurFade delay={BLUR_FADE_DELAY * 11}>
+          <BlurFade delay={BLUR_FADE_DELAY * 5}>
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
@@ -346,9 +348,9 @@ setThemeValue(theme)
               </h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 Want to chat? Just shoot me a dm { " "}
-                {contact?.social?.Youtube?.url ? (
+                {contact?.social?.LinkedIn?.url ? (
                   <Link
-                    href={contact.social.LinkedIn.url}
+                    href={contact?.social?.LinkedIn?.url}
                     className="text-blue-500 hover:underline"
                   >
                     with a direct question on LinkedIn
