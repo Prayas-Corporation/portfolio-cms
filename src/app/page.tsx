@@ -153,7 +153,7 @@ setThemeValue(theme)
                 </div>
 
                 <BlurFade delay={BLUR_FADE_DELAY}>
-                  <div className="hidden sm:flex relative h-[300px] w-[300px] items-center justify-center overflow-hidden rounded-lg border-0 bg-background p-8">
+                  <div className="hidden sm:flex relative h-[300px] w-[300px] items-center justify-center overflow-hidden rounded-lg border-0  p-8">
                     {heroData.avatarUrl && (
                       <IconCloud iconSlugs={slugs} heroData={heroData} />
                     )}

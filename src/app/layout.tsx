@@ -43,6 +43,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "min-h-screen bg-background font-sans antialiased w-full max-w-5xl mx-auto py-8 sm:py-16 px-4 sm:px-12",
           fontSans.variable
         )}
+        style={{
+          backgroundImage:
+            'radial-gradient(ellipse at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
+          backgroundRepeat: "no-repeat",
+        }}
       >
         <ThemeProvider attribute="class" defaultTheme="dark">
           <TooltipProvider delayDuration={0}>
