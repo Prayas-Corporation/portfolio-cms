@@ -172,10 +172,10 @@ setThemeValue(theme)
             </div>
           </section>
 
-          <section id="about">
+          <section id="about" >
           <BlurFade delay={BLUR_FADE_DELAY }>
             <ShineBorder
-              className="relative p-8 flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background md:shadow-xl whitespace-pre-wrap text-center text-8xl"
+              className="relative p-8 flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background md:shadow-xl whitespace-pre-wrap text-center text-8xl mb-10"
               color={themeValue === "dark" ? "white" : "black"}
             >
               <Markdown className="prose max-w-full bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent sans font-light">
