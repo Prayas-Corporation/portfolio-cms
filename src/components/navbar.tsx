@@ -41,7 +41,7 @@ export default function Navbar() {
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30 mx-auto mb-4 flex origin-bottom h-full max-h-14">
-      <div className="fixed bottom-0 inset-x-0 h-16 w-full  to-transparent  "></div>
+      <div className="fixed bottom-0 inset-x-0 to-transparent  "></div>
       <Dock className="z-50 pointer-events-auto relative mx-auto flex min-h-full h-full items-center px-1 bg-background transform-gpu dark:[border:1px solid rgba(255,255,255,.1)] ">
         
         {DATA.navbar.map((item) => (
