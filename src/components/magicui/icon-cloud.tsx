@@ -109,7 +109,7 @@ export default function IconCloud({ iconSlugs, heroData }: DynamicCloudProps) {
             alignItems: "center",
           }}
         >
-          <Avatar className="size-28 border">
+          <Avatar className="size-40 border">
             <AvatarImage alt={heroData.name} src={heroData.avatarUrl} />
           </Avatar>
         </div>
