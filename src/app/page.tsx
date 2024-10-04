@@ -25,7 +25,7 @@ const slugs = [
   "androidstudio", "sonarqube", "figma",
 ];
 
-const BLUR_FADE_DELAY = 0.4;
+const BLUR_FADE_DELAY = 0.1;
 
 export default function Page() {
   const [loading, setLoading] = useState(true); // Track loading state
@@ -189,7 +189,7 @@ className="relative p-8 flex w-full flex-col items-center justify-center overflo
 
       <section id="work">
         <div className="flex min-h-0 flex-col gap-y-3">
-          <BlurFade delay={BLUR_FADE_DELAY * 2}>
+          <BlurFade delay={BLUR_FADE_DELAY * 1}>
             <h2 className="text-xl font-bold">Work Experience</h2>
           </BlurFade>
           {workData.map((work: any, id) => (
@@ -215,7 +215,7 @@ className="relative p-8 flex w-full flex-col items-center justify-center overflo
 
       <section id="education">
         <div className="flex min-h-0 flex-col gap-y-3">
-          <BlurFade delay={BLUR_FADE_DELAY * 3}>
+          <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <h2 className="text-xl font-bold">Education</h2>
           </BlurFade>
           {educationData.map((education: any, id) => (
@@ -239,7 +239,7 @@ className="relative p-8 flex w-full flex-col items-center justify-center overflo
 
       <section id="skills">
         <div className="flex min-h-0 flex-col gap-y-3">
-          <BlurFade delay={BLUR_FADE_DELAY * 4}>
+          <BlurFade delay={BLUR_FADE_DELAY * 3}>
             <h2 className="text-xl font-bold">Skills</h2>
           </BlurFade>
           <div className="flex flex-wrap gap-1">
@@ -253,52 +253,51 @@ className="relative p-8 flex w-full flex-col items-center justify-center overflo
       </section>
 
       <section id="projects">
-        <div className="space-y-12 w-full py-12">
-          <BlurFade delay={BLUR_FADE_DELAY * 5}>
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
-                  My Projects
-                </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                  Check out my latest work
-                </h2>
-                <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  I&apos;ve worked on a variety of projects, from simple
-                  websites to complex web applications. Here are a few of my
-                  favorites.
-                </p>
-              </div>
-            </div>
-          </BlurFade>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
-            {projects.map((project: any, id) => (
-              <BlurFade
-                key={project.title}
-                delay={BLUR_FADE_DELAY * 12 + id * 0.05}
-              >
-                <ProjectCard
-                  href={project.href}
-                  key={project.title}
-                  title={project.title}
-                  description={project.description}
-                  dates={project.dates}
-                  tags={project.technologies}
-                  image={project.image}
-                  gifUrl={project.gifUrl} // Pass gifUrl to ProjectCard
-                  links={project.links}
-                  youtubeLink={project.youtubeLink} // Pass YouTube link
-                  githubLink={project.githubLink}
-                />
-              </BlurFade>
-            ))}
+  <div className="space-y-12 w-full py-12">
+    <BlurFade delay={BLUR_FADE_DELAY * 3}>
+      <div className="flex flex-col items-center justify-center space-y-4 text-center">
+        <div className="space-y-2">
+          <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
+            My Projects
           </div>
+          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+            Check out my latest work
+          </h2>
+          <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            I've worked on a variety of projects, from simple websites to complex web applications. Here are a few of my favorites.
+          </p>
         </div>
-      </section>
+      </div>
+    </BlurFade>
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
+      {projects.slice(0, 4).map((project: any, id) => (
+        <BlurFade key={project.title} delay={BLUR_FADE_DELAY * 12 + id * 0.05}>
+          <ProjectCard
+            href={project.href}
+            title={project.title}
+            description={project.description}
+            dates={project.dates}
+            tags={project.technologies}
+            image={project.image}
+            gifUrl={project.gifUrl}
+            links={project.links}
+            youtubeLink={project.youtubeLink}
+            githubLink={project.githubLink}
+          />
+        </BlurFade>
+      ))}
+    </div>
+    <div className="text-center mt-6">
+      <Link href="/allProjects" className="inline-block text-lg font-semibold px-6 py-3 rounded-md bg-gradient-to-r from-teal-400 to-blue-500 text-white hover:from-teal-500 hover:to-blue-600 transition-colors">
+        View All Projects
+      </Link>
+    </div>
+  </div>
+</section>
 
       <section id="hackathons">
         <div className="space-y-12 w-full py-12">
-          <BlurFade delay={BLUR_FADE_DELAY * 13}>
+          <BlurFade delay={BLUR_FADE_DELAY * 3}>
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
@@ -315,7 +314,7 @@ className="relative p-8 flex w-full flex-col items-center justify-center overflo
               </div>
             </div>
           </BlurFade>
-          <BlurFade delay={BLUR_FADE_DELAY * 14}>
+          <BlurFade delay={BLUR_FADE_DELAY * 4}>
             <ul className="mb-4 ml-4 divide-y divide-dashed border-l">
               {hackathons.map((project: any, id) => (
                 <BlurFade
@@ -339,7 +338,7 @@ className="relative p-8 flex w-full flex-col items-center justify-center overflo
 
       <section id="contact">
         <div className="grid items-center justify-center gap-4 px-4 text-center md:px-6 w-full py-12">
-          <BlurFade delay={BLUR_FADE_DELAY * 16}>
+          <BlurFade delay={BLUR_FADE_DELAY * 6}>
             <div className="space-y-3">
               <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
                 Contact
